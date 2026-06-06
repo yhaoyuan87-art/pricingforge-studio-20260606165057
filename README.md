@@ -1,41 +1,54 @@
-# PricingForge Studio 20260606165057
+# PricingForge Studio
 
-PricingForge Studio is a premium single-page pricing and packaging simulator for indie founders, solo makers, and small SaaS teams. It helps model three SaaS packages, monthly prices, customer mix, visitor-to-paid conversion, and churn, then shows projected MRR, ARPA, annualized revenue, churn-adjusted revenue, tier contribution bars, and a live pricing recommendation.
+PricingForge Studio 是一个中文 SaaS 定价与套餐模拟器，面向独立开发者、个人创业者和小型 SaaS 团队。它帮助用户在上线前快速判断三档套餐、价格梯度、客户结构、转化率和流失率是否能支撑健康收入。
 
-## V1 Static MVP
+## 当前版本
 
-The app is fully client-side with no login, backend, payments, AI calls, or persistence beyond the current page. Edit tier names, prices, package copy, funnel assumptions, and customer distribution directly in the workbench. Every metric updates immediately.
+这是一个完整静态 V1，无登录、无后端、无支付、无 AI 调用、无云端存储。用户打开页面即可：
 
-## Run or Open
+- 阅读“3 分钟判断定价是否靠谱”的产品说明。
+- 按三步理解使用方式：输入增长假设、调整三档套餐、读取诊断建议。
+- 编辑三档套餐名称、月价格、套餐卖点和客户占比。
+- 调整月访问量、访问到付费转化率、月流失率。
+- 实时查看 MRR、ARPA、年化收入、流失调整后收入。
+- 查看收入结构条形图和中文定价诊断。
+- 一键复制汇报摘要，粘贴到团队群、会议纪要或 PRD。
 
-Open `index.html` directly in a browser.
+## 打开方式
 
-For local browser verification from the workspace root, you can also serve the folder:
+直接用浏览器打开：
 
 ```bash
-python -m http.server 4173
+index.html
 ```
 
-Then open `http://localhost:4173`.
+也可以在项目根目录启动本地静态服务：
 
-## Verify
+```bash
+python -m http.server 4181
+```
 
-Run the lightweight revenue math check:
+然后访问：
+
+```text
+http://127.0.0.1:4181
+```
+
+## 验证
+
+运行收入模型测试：
 
 ```bash
 node tests/revenue-math.test.js
 ```
 
-Manual verification:
+手动验收：
 
-- Change monthly visitors, conversion, churn, tier prices, and customer mix; confirm MRR, ARPA, annualized revenue, churn-adjusted revenue, tier readouts, revenue bars, and recommendation copy update live.
-- Review desktop and mobile widths; controls should remain usable and text should not overlap.
-- Use Reset to restore the default founder SaaS scenario.
+- 修改月访问量、转化率、流失率，确认四个收入指标和诊断建议实时更新。
+- 修改套餐名称、价格、卖点和客户分布，确认套餐卡片、收入条和诊断建议同步变化。
+- 点击“复制汇报摘要”，确认能获得可用于汇报的中文摘要。
+- 在桌面和手机宽度检查页面，确认文案清晰、控件可用、无重叠或横向溢出。
 
-## Self-review Checklist
+## 视觉基准
 
-- Three editable pricing tiers with names, monthly prices, package copy, and customer mix controls.
-- Live MRR, ARPA, annualized revenue, churn-adjusted signal, tier bars, and recommendation updates.
-- Static-only implementation with no login, backend, payments, AI calls, or persistence.
-- Responsive founder-tool layout for desktop and mobile review.
-- Revenue math covered by `tests/revenue-math.test.js`.
+项目内置 `assets/visual-benchmark.svg` 作为当前 UI 的视觉基准：深色诊断面板、浅色工作台、绿色增长信号、红色风险信号和收入条形结构。由于当前 Codex 会话没有可调用的内置 image generation 工具，且本地没有 `OPENAI_API_KEY` 可用于 imagegen CLI fallback，本版本使用项目内可审查的 SVG 基准资产替代 AI 位图。

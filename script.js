@@ -1,24 +1,24 @@
 const defaults = {
-  visitors: 24000,
-  conversion: 2.8,
-  churn: 3.5,
+  visitors: 18000,
+  conversion: 2.6,
+  churn: 3.2,
   tiers: [
     {
-      name: "Launch",
-      price: 29,
-      copy: "For early-stage products validating willingness to pay. Includes core workspace, three active experiments, and founder reporting.",
-      mix: 48
+      name: "入门版",
+      price: 99,
+      copy: "给刚开始验证付费意愿的个人开发者。包含核心工作台、3 个定价场景和基础收入预测。",
+      mix: 46
     },
     {
-      name: "Scale",
-      price: 79,
-      copy: "For growing SaaS teams that need packaging depth. Includes unlimited scenarios, cohort views, and board-ready revenue snapshots.",
-      mix: 37
+      name: "增长版",
+      price: 299,
+      copy: "给已经有稳定线索的小团队。包含无限场景、套餐对比、客户结构分析和汇报摘要。",
+      mix: 39
     },
     {
-      name: "Command",
-      price: 189,
-      copy: "For operators managing premium plans and annual sales motions. Includes advanced segments, expansion signals, and executive exports.",
+      name: "旗舰版",
+      price: 899,
+      copy: "给正在测试高客单价的团队。包含高端套餐锚点、年度合同假设和管理层决策视图。",
       mix: 15
     }
   ]
@@ -26,13 +26,13 @@ const defaults = {
 
 let state = structuredClone(defaults);
 
-const currency = new Intl.NumberFormat("en-US", {
+const currency = new Intl.NumberFormat("zh-CN", {
   style: "currency",
-  currency: "USD",
+  currency: "CNY",
   maximumFractionDigits: 0
 });
 
-const number = new Intl.NumberFormat("en-US", {
+const number = new Intl.NumberFormat("zh-CN", {
   maximumFractionDigits: 0
 });
 
@@ -59,7 +59,6 @@ const elements = {
   mrrSubcopy: document.querySelector("#mrrSubcopy"),
   signalSubcopy: document.querySelector("#signalSubcopy"),
   heroSignal: document.querySelector("#heroSignal"),
-  heroSignalNote: document.querySelector("#heroSignalNote"),
   tierGrid: document.querySelector("#tierGrid"),
   distributionControls: document.querySelector("#distributionControls"),
   distributionTotal: document.querySelector("#distributionTotal"),
@@ -69,7 +68,9 @@ const elements = {
   recommendationList: document.querySelector("#recommendationList"),
   paidCustomersCopy: document.querySelector("#paidCustomersCopy"),
   revenueBars: document.querySelector("#revenueBars"),
-  resetButton: document.querySelector("#resetButton")
+  resetButton: document.querySelector("#resetButton"),
+  copySummaryButton: document.querySelector("#copySummaryButton"),
+  copyState: document.querySelector("#copyState")
 };
 
 function getMixTotal() {
@@ -96,29 +97,33 @@ function renderTierCards() {
     .map(
       (tier, index) => `
         <article class="tier-card">
+          <div class="tier-card__top">
+            <span>套餐 ${index + 1}</span>
+            ${index === 1 ? '<strong>推荐主推</strong>' : ""}
+          </div>
           <div class="field">
-            <label for="tierName${index}">Tier name</label>
+            <label for="tierName${index}">套餐名称</label>
             <input class="text-input" id="tierName${index}" data-tier="${index}" data-field="name" value="${escapeHtml(tier.name)}" />
           </div>
           <div class="field">
-            <label for="tierPrice${index}">Monthly price</label>
+            <label for="tierPrice${index}">月价格</label>
             <div class="price-wrap">
-              <span>$</span>
+              <span>¥</span>
               <input class="price-input" id="tierPrice${index}" data-tier="${index}" data-field="price" type="number" min="0" step="1" value="${tier.price}" />
             </div>
           </div>
           <div class="field">
-            <label for="tierCopy${index}">Package copy</label>
+            <label for="tierCopy${index}">套餐卖点</label>
             <textarea class="copy-input" id="tierCopy${index}" data-tier="${index}" data-field="copy">${escapeHtml(tier.copy)}</textarea>
           </div>
           <div class="tier-readout">
             <div>
-              <span>Customers</span>
+              <span>预计客户</span>
               <strong id="tierCustomers${index}">0</strong>
             </div>
             <div>
-              <span>MRR</span>
-              <strong id="tierRevenue${index}">$0</strong>
+              <span>贡献 MRR</span>
+              <strong id="tierRevenue${index}">¥0</strong>
             </div>
           </div>
         </article>
@@ -133,7 +138,7 @@ function renderDistributionControls() {
       (tier, index) => `
         <label class="control">
           <span>
-            ${escapeHtml(tier.name || `Tier ${index + 1}`)}
+            ${escapeHtml(tier.name || `套餐 ${index + 1}`)}
             <output id="mixValue${index}">${tier.mix}%</output>
           </span>
           <input data-tier="${index}" data-field="mix" type="range" min="0" max="100" step="1" value="${tier.mix}" />
@@ -148,71 +153,66 @@ function getRecommendation(model) {
   const middleMix = normalizedMix(state.tiers[1]);
   const churn = state.churn;
 
-  if (model.mrr < 10000) {
+  if (model.mrr < 30000) {
     return {
-      title: "The model needs more pricing power.",
-      copy: "MRR is still fragile. Raise the entry package or shift more buyers into the middle tier before investing in acquisition.",
-      signal: "Needs work",
-      note: "Current revenue does not yet support a strong paid growth motion.",
+      title: "收入底盘还不够硬，先别急着投放。",
+      copy: "当前 MRR 偏薄，说明价格、转化或客户结构里至少有一个环节不够强。先把主推套餐价值说清楚，再扩大流量。",
+      signal: "需要打磨",
       items: [
-        "Test a higher Launch price with clearer outcome-based packaging.",
-        "Give Scale the strongest benefit stack so it becomes the default choice.",
-        "Use annual prepay only after monthly conversion holds steady."
+        "把入门版压缩成明确的低风险入口，不要承诺太多。",
+        "提高增长版价格或卖点，让它成为最自然的选择。",
+        "在转化率稳定前，不要把增长问题简单归因于流量不够。"
       ]
     };
   }
 
   if (churn > 7) {
     return {
-      title: "Retention is the bottleneck.",
-      copy: "Revenue looks promising, but churn is absorbing too much of the upside. Packaging should reduce buyer mismatch.",
-      signal: "Churn risk",
-      note: "Churn-adjusted revenue is materially below gross MRR.",
+      title: "流失率正在吞掉增长，套餐可能卖错人了。",
+      copy: "表面收入不错，但高流失会让增长质量变差。你需要用套餐边界过滤不匹配客户。",
+      signal: "流失风险",
       items: [
-        "Move advanced or support-heavy promises out of the entry tier.",
-        "Add stronger onboarding language to the tier most customers choose.",
-        "Use the premium tier for high-touch accounts that can sustain service cost."
+        "把高服务成本功能从入门版移出，避免吸引低质量客户。",
+        "在增长版中加入更明确的成功路径，降低购买后的落差。",
+        "旗舰版只承诺高客单价客户真正愿意为之付费的结果。"
       ]
     };
   }
 
-  if (middleMix < 0.25) {
+  if (middleMix < 0.28) {
     return {
-      title: "The middle package is not doing enough work.",
-      copy: "A premium pricing page usually needs a confident middle offer. Your current mix leans too hard on the edges.",
-      signal: "Rebalance",
-      note: "Customer distribution is diluting the intended package ladder.",
+      title: "中间档太弱，价格页会失去主心骨。",
+      copy: "健康的 SaaS 定价通常需要一个强主推档。现在客户分布太偏两端，会让收入结构不稳定。",
+      signal: "需要重排",
       items: [
-        "Make Scale the clearest default by moving a decisive feature there.",
-        "Reduce Launch copy to buyer qualification instead of broad capability.",
-        "Use Command as an anchor with executive or expansion language."
+        "把最有业务结果感的能力放进增长版。",
+        "入门版只保留验证价值，不要让它看起来过于划算。",
+        "旗舰版负责树立价格锚点，不要抢走增长版的核心定位。"
       ]
     };
   }
 
-  if (priceSpread < 4) {
+  if (priceSpread < 5) {
     return {
-      title: "Create a stronger premium anchor.",
-      copy: "The tiers are converting, but the top package may be too close to the entry point to reveal enterprise willingness to pay.",
-      signal: "Upside",
-      note: "The top-to-bottom price spread is conservative.",
+      title: "高端锚点不够强，ARPA 还有上升空间。",
+      copy: "三档价格差距偏保守，用户不容易意识到旗舰版代表更高价值场景。",
+      signal: "有上升空间",
       items: [
-        "Increase Command or add premium-only value tied to revenue outcomes.",
-        "Keep Launch focused so the jump to Scale feels rational.",
-        "Watch whether ARPA rises without collapsing paid conversion."
+        "提高旗舰版价格，或者加入明显的管理层/年度合同价值。",
+        "保持入门版克制，让增长版成为最容易成交的主推项。",
+        "观察提价后 ARPA 是否上升，同时转化率是否保持健康。"
       ]
     };
   }
 
   return {
-    title: "Nudge buyers toward the middle package.",
-    copy: "The current mix gives you a credible entry point, a healthy default tier, and a premium anchor worth testing.",
-    signal: "Balanced",
-    note: "Healthy ARPA spread with room to sharpen the top tier.",
+    title: "结构健康，可以围绕增长版继续测试。",
+    copy: "当前模型具备清晰入口、主推套餐和高端锚点。下一步应该围绕增长版文案和转化率做 A/B 测试。",
+    signal: "健康",
     items: [
-      "Keep Scale visually and commercially positioned as the default.",
-      "Use Command to test expansion appetite with premium workflow language.",
-      "If conversion rises, raise Launch before spending more on traffic."
+      "让增长版在视觉和文案上成为默认选择。",
+      "用旗舰版测试更高支付意愿，不要害怕拉开价格差。",
+      "如果转化率上升，优先提高入门版价格，而不是继续加功能。"
     ]
   };
 }
@@ -230,21 +230,20 @@ function renderModel() {
   elements.arpaMetric.textContent = currency.format(model.arpa);
   elements.arrMetric.textContent = currency.format(model.annualized);
   elements.signalMetric.textContent = currency.format(model.churnAdjusted);
-  elements.mrrSubcopy.textContent = `${number.format(model.paidCustomers)} projected paid customers`;
-  elements.signalSubcopy.textContent = `${currency.format(model.mrr - model.churnAdjusted)} monthly churn drag`;
+  elements.mrrSubcopy.textContent = `预计 ${number.format(model.paidCustomers)} 位月付费客户`;
+  elements.signalSubcopy.textContent = `每月流失拖累约 ${currency.format(model.mrr - model.churnAdjusted)}`;
   elements.distributionTotal.textContent = `${totalMix}%`;
   elements.distributionHelp.textContent =
     totalMix === 100
-      ? "Mix totals 100%. Revenue model uses these assumptions directly."
-      : "Mix is normalized automatically for revenue modeling.";
+      ? "客户占比正好 100%，当前模型可直接用于汇报。"
+      : "客户占比会自动归一化，适合快速试算。";
   elements.heroSignal.textContent = recommendation.signal;
-  elements.heroSignalNote.textContent = recommendation.note;
   elements.recommendationTitle.textContent = recommendation.title;
   elements.recommendationCopy.textContent = recommendation.copy;
   elements.recommendationList.innerHTML = recommendation.items
     .map((item) => `<div class="recommendation-item">${item}</div>`)
     .join("");
-  elements.paidCustomersCopy.textContent = `${number.format(model.paidCustomers)} projected paid customers this month`;
+  elements.paidCustomersCopy.textContent = `预计 ${number.format(model.paidCustomers)} 位月付费客户`;
 
   model.tierModels.forEach((tier, index) => {
     document.querySelector(`#tierCustomers${index}`).textContent = number.format(tier.customers);
@@ -259,20 +258,46 @@ function renderModel() {
       return `
         <div class="bar-row">
           <div class="bar-label">
-            <strong>${escapeHtml(tier.name || "Untitled")}</strong>
-            <span>${Math.round(normalizedMix(tier) * 100)}% of customers</span>
+            <strong>${escapeHtml(tier.name || "未命名套餐")}</strong>
+            <span>${Math.round(normalizedMix(tier) * 100)}% 客户占比</span>
           </div>
           <div class="bar-track" aria-hidden="true">
             <div class="bar-fill" style="width: ${width}%"></div>
           </div>
           <div class="bar-value">
             <strong>${currency.format(tier.revenue)}</strong>
-            <span>${number.format(tier.customers)} customers</span>
+            <span>${number.format(tier.customers)} 位客户</span>
           </div>
         </div>
       `;
     })
     .join("");
+}
+
+function buildSummary() {
+  const model = getModel();
+  const recommendation = getRecommendation(model);
+
+  return [
+    "PricingForge 定价摘要",
+    `预计 MRR：${currency.format(model.mrr)}`,
+    `ARPA：${currency.format(model.arpa)}`,
+    `年化收入：${currency.format(model.annualized)}`,
+    `流失调整后收入：${currency.format(model.churnAdjusted)}`,
+    `诊断：${recommendation.signal} - ${recommendation.title}`,
+    `建议：${recommendation.items.join("；")}`
+  ].join("\n");
+}
+
+async function copySummary() {
+  const summary = buildSummary();
+
+  try {
+    await navigator.clipboard.writeText(summary);
+    elements.copyState.textContent = "已复制，可直接粘贴到团队群或会议纪要。";
+  } catch {
+    elements.copyState.textContent = summary;
+  }
 }
 
 function syncControls() {
@@ -324,7 +349,10 @@ elements.distributionControls.addEventListener("input", (event) => {
 
 elements.resetButton.addEventListener("click", () => {
   state = structuredClone(defaults);
+  elements.copyState.textContent = "";
   syncControls();
 });
+
+elements.copySummaryButton.addEventListener("click", copySummary);
 
 syncControls();

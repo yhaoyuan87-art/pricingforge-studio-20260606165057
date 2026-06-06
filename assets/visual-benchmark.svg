@@ -1,0 +1,36 @@
+<svg width="980" height="720" viewBox="0 0 980 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PricingForge visual benchmark</title>
+  <desc id="desc">A premium Chinese pricing workbench reference image with revenue cards, package ladder, and diagnosis panel.</desc>
+  <rect width="980" height="720" rx="34" fill="#0F1715"/>
+  <path d="M0 108C134 54 238 54 377 108C518 163 635 162 980 49V720H0V108Z" fill="#123B34"/>
+  <path d="M724 0C655 94 642 170 686 229C750 314 875 269 980 332V0H724Z" fill="#BE3455" fill-opacity="0.72"/>
+  <rect x="74" y="72" width="832" height="576" rx="26" fill="#F8FBF9"/>
+  <rect x="106" y="104" width="768" height="62" rx="16" fill="#111816"/>
+  <circle cx="139" cy="135" r="8" fill="#0B7F69"/>
+  <circle cx="165" cy="135" r="8" fill="#F1B84B"/>
+  <circle cx="191" cy="135" r="8" fill="#BE3455"/>
+  <rect x="642" y="125" width="174" height="12" rx="6" fill="#FCFFFD" fill-opacity="0.5"/>
+  <rect x="106" y="198" width="224" height="120" rx="18" fill="#FFFFFF" stroke="#D5DFDA"/>
+  <rect x="378" y="198" width="224" height="120" rx="18" fill="#FFFFFF" stroke="#D5DFDA"/>
+  <rect x="650" y="198" width="224" height="120" rx="18" fill="#FFFFFF" stroke="#D5DFDA"/>
+  <rect x="132" y="224" width="76" height="12" rx="6" fill="#64706B" fill-opacity="0.42"/>
+  <rect x="132" y="252" width="138" height="34" rx="9" fill="#0B7F69"/>
+  <rect x="404" y="224" width="76" height="12" rx="6" fill="#64706B" fill-opacity="0.42"/>
+  <rect x="404" y="252" width="138" height="34" rx="9" fill="#BE3455"/>
+  <rect x="676" y="224" width="76" height="12" rx="6" fill="#64706B" fill-opacity="0.42"/>
+  <rect x="676" y="252" width="138" height="34" rx="9" fill="#1F6F9D"/>
+  <rect x="106" y="350" width="488" height="236" rx="22" fill="#FFFFFF" stroke="#D5DFDA"/>
+  <rect x="132" y="382" width="124" height="16" rx="8" fill="#111816"/>
+  <rect x="132" y="428" width="396" height="24" rx="12" fill="#E7EFEA"/>
+  <rect x="132" y="428" width="312" height="24" rx="12" fill="#0B7F69"/>
+  <rect x="132" y="476" width="396" height="24" rx="12" fill="#E7EFEA"/>
+  <rect x="132" y="476" width="232" height="24" rx="12" fill="#BE3455"/>
+  <rect x="132" y="524" width="396" height="24" rx="12" fill="#E7EFEA"/>
+  <rect x="132" y="524" width="144" height="24" rx="12" fill="#1F6F9D"/>
+  <rect x="630" y="350" width="244" height="236" rx="22" fill="#111816"/>
+  <rect x="660" y="384" width="82" height="12" rx="6" fill="#FCFFFD" fill-opacity="0.42"/>
+  <rect x="660" y="420" width="154" height="28" rx="8" fill="#0B7F69"/>
+  <rect x="660" y="476" width="184" height="16" rx="8" fill="#FCFFFD" fill-opacity="0.22"/>
+  <rect x="660" y="510" width="142" height="16" rx="8" fill="#FCFFFD" fill-opacity="0.22"/>
+  <rect x="660" y="544" width="166" height="16" rx="8" fill="#FCFFFD" fill-opacity="0.22"/>
+</svg>
