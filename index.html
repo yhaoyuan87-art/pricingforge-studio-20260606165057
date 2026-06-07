@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PricingForge Studio | SaaS 定价决策台</title>
+    <meta
+      name="description"
+      content="给独立开发者和小型 SaaS 团队使用的中文定价与套餐模拟器，快速判断价格、套餐和增长假设是否靠谱。"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero__copy">
+          <p class="eyebrow">PricingForge Studio</p>
+          <h1 id="page-title">3 分钟判断你的 SaaS 定价是否靠谱。</h1>
+          <p class="hero__lede">
+            把三档套餐、流量转化、流失率和客户结构放进同一个决策台，立刻看到 MRR、ARPA、年化收入和下一步定价建议。
+          </p>
+          <div class="hero__actions">
+            <a href="#studio" class="button button--primary">开始模拟</a>
+            <a href="#how-it-works" class="button button--ghost">先看怎么用</a>
+          </div>
+          <div class="trust-strip" aria-label="适用场景">
+            <span>独立开发者</span>
+            <span>小型 SaaS 团队</span>
+            <span>上线前定价 review</span>
+          </div>
+        </div>
+        <div class="hero__visual">
+          <img src="assets/visual-benchmark.svg" alt="PricingForge 中文定价工作台视觉基准" />
+        </div>
+      </section>
+
+      <section class="how-it-works" id="how-it-works" aria-labelledby="how-title">
+        <div>
+          <p class="eyebrow">How it works</p>
+          <h2 id="how-title">不用懂财务模型，也能看懂定价问题。</h2>
+        </div>
+        <div class="steps">
+          <article>
+            <strong>01</strong>
+            <h3>输入增长假设</h3>
+            <p>设置月访问量、付费转化率和月流失率，先看增长底盘是否够用。</p>
+          </article>
+          <article>
+            <strong>02</strong>
+            <h3>调整三档套餐</h3>
+            <p>改套餐名称、价格、卖点和客户占比，观察收入结构怎么变化。</p>
+          </article>
+          <article>
+            <strong>03</strong>
+            <h3>读取诊断建议</h3>
+            <p>系统会指出定价过低、流失风险、套餐梯度或中间档弱的问题。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="metrics-grid" aria-label="收入摘要">
+        <article class="metric-card">
+          <span>预计 MRR</span>
+          <strong id="mrrMetric">¥0</strong>
+          <small id="mrrSubcopy">根据当前漏斗和客户结构计算</small>
+        </article>
+        <article class="metric-card">
+          <span>ARPA</span>
+          <strong id="arpaMetric">¥0</strong>
+          <small>平均每位付费客户月收入</small>
+        </article>
+        <article class="metric-card">
+          <span>年化收入</span>
+          <strong id="arrMetric">¥0</strong>
+          <small>MRR 乘以 12，用于判断商业体量</small>
+        </article>
+        <article class="metric-card">
+          <span>流失调整后收入</span>
+          <strong id="signalMetric">¥0</strong>
+          <small id="signalSubcopy">扣除流失拖累后的收入信号</small>
+        </article>
+      </section>
+
+      <section class="studio-layout" id="studio">
+        <aside class="panel panel--assumptions">
+          <div class="panel__heading">
+            <div>
+              <p class="eyebrow">Step 1</p>
+              <h2>增长假设</h2>
+            </div>
+            <button class="reset-button" type="button" id="resetButton">恢复样例</button>
+          </div>
+
+          <div class="control-stack">
+            <label class="control">
+              <span>
+                月访问量
+                <output id="visitorsValue">18,000</output>
+              </span>
+              <input id="visitorsInput" type="range" min="1000" max="150000" step="500" value="18000" />
+            </label>
+
+            <label class="control">
+              <span>
+                访问到付费转化率
+                <output id="conversionValue">2.6%</output>
+              </span>
+              <input id="conversionInput" type="range" min="0.2" max="12" step="0.1" value="2.6" />
+            </label>
+
+            <label class="control">
+              <span>
+                月流失率
+                <output id="churnValue">3.2%</output>
+              </span>
+              <input id="churnInput" type="range" min="0.5" max="12" step="0.1" value="3.2" />
+            </label>
+          </div>
+
+          <div class="distribution">
+            <div class="distribution__head">
+              <h3>客户分布</h3>
+              <span id="distributionTotal">100%</span>
+            </div>
+            <div id="distributionControls" class="distribution__controls"></div>
+            <p class="helper" id="distributionHelp">客户占比会自动归一化，便于快速试算。</p>
+          </div>
+        </aside>
+
+        <section class="panel panel--recommendation" aria-labelledby="recommendationTitle">
+          <p class="eyebrow">Strategy readout</p>
+          <div class="scenario-badge">
+            <span>当前诊断</span>
+            <strong id="heroSignal">健康</strong>
+          </div>
+          <h2 id="recommendationTitle">把购买决策推向中间档。</h2>
+          <p id="recommendationCopy">
+            当前价格梯度有清晰入口、中间档和高端锚点，适合继续测试转化。
+          </p>
+          <div class="recommendation-list" id="recommendationList"></div>
+          <button class="copy-button" type="button" id="copySummaryButton">复制汇报摘要</button>
+          <p class="copy-state" id="copyState" aria-live="polite"></p>
+        </section>
+      </section>
+
+      <section class="tiers-section" aria-labelledby="tiers-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Step 2</p>
+            <h2 id="tiers-title">套餐与价格</h2>
+          </div>
+          <p>直接编辑三档套餐，右侧指标会实时变化。建议中间档承担主要收入，高端档承担价格锚点。</p>
+        </div>
+        <div class="tier-grid" id="tierGrid"></div>
+      </section>
+
+      <section class="panel chart-panel" aria-labelledby="chart-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Step 3</p>
+            <h2 id="chart-title">收入结构</h2>
+          </div>
+          <p id="paidCustomersCopy">预计 0 位月付费客户</p>
+        </div>
+        <div class="bars" id="revenueBars"></div>
+      </section>
+    </main>
+
+    <script src="revenue-math.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
